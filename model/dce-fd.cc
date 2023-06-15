@@ -853,3 +853,41 @@ int dce_fsync (int fd)
   NS_LOG_FUNCTION (current << UtilsGetNodeId () << fd);
   OPENED_FD_METHOD (int, Fsync ())
 }
+int dce_dprintf(int fd, const char *f, ...)
+{
+  Thread *current = Current ();
+  NS_LOG_FUNCTION (current << UtilsGetNodeId () << fd << f);
+  NS_ASSERT (current != 0);
+
+  char *s = NULL;
+  va_list vl;
+  va_start (vl, f);
+  int r = vasprintf(&s, f, vl);
+  va_end (vl);
+
+  if (r != -1) {
+      std::map < int,FileUsage * > ::iterator it = current->process->openFiles.find (fd);
+      if (current->process->openFiles.end () == it) 
+      {
+        current->err = EBADF;
+        return -1;
+      } 
+      FileUsage *fu = it->second;
+      if (fu->IsClosed ())
+      {
+        current->err = EBADF;
+        return -1;
+      }
+      UnixFd *unixFd =  fu->GetFileInc ();
+      int r = unixFd->Write(s, strlen(s));
+      if (fu && fu->DecUsage ())
+      {
+        current->process->openFiles.erase (fd);
+        delete fu;
+        fu = 0;
+      }
+      free(s);
+  }
+
+  return r;
+}

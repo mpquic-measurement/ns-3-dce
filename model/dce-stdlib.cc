@@ -108,7 +108,6 @@ int dce_mkstemp (char *temp)
   if (realFd == -1)
     {
       current->err = errno;
-      delete c_fullpath;
       return -1;
     }
 
@@ -116,7 +115,6 @@ int dce_mkstemp (char *temp)
   if (fd == -1)
     {
       current->err = EMFILE;
-      delete c_fullpath;
       return -1;
     }
   UnixFd *unixFd = 0;
@@ -125,7 +123,6 @@ int dce_mkstemp (char *temp)
   current->process->openFiles[fd] = new FileUsage (fd, unixFd);
 
   strncpy (temp, &c_fullpath[strlen(c_fullpath)-strlen(temp)], strlen(temp));
-  delete c_fullpath;
   return fd;
 }
 

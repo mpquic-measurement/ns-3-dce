@@ -26,6 +26,7 @@ int dce_clearenv (void);
 int dce_mkstemp (char *temp);
 FILE * dce_tmpfile(void);
 int dce_rename (const char *oldpath, const char *newpath);
+int dce_dprintf(int fd, const char *format, ...);
 
 #ifdef __cplusplus
 }

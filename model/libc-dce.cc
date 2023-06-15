@@ -121,7 +121,7 @@ extern int (*__gxx_personality_v0)(int a, int b,
 // extern int __gxx_personality_v0 (int a, int b,
 //                                                               unsigned c, struct _Unwind_Exception *d, struct _Unwind_Context *e);
 // extern int __xpg_strerror_r (int __errnum, char *__buf, size_t __buflen);
-extern int __xpg_strerror_r (int __errnum, char *__buf, size_t __buflen);
+// extern int __xpg_strerror_r (int __errnum, char *__buf, size_t __buflen);
 
 // from glibc's string.h
 extern char * __strcpy_chk (char *__restrict __dest,

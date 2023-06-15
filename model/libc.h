@@ -4,6 +4,7 @@
 #include <stdarg.h>
 #define _SYS_SELECT_H
 #include <sys/types.h>
+#include <bits/select2.h>
 #undef _SYS_SELECT_H
 
 struct Libc

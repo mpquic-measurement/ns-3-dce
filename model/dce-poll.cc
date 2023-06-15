@@ -15,6 +15,17 @@ NS_LOG_COMPONENT_DEFINE ("DcePollSelect");
 
 using namespace ns3;
 
+long int dce___fdelt_chk(long int d)
+{
+	if (d < 0 || d >= FD_SETSIZE) {
+		fprintf(stderr, "fdelt_chk: buffer overflow detected\n");
+		fflush(stderr);
+		exit(-1);
+	}
+
+	return d / __NFDBITS;
+}
+
 int dce_poll (struct pollfd *fds, nfds_t nfds, int timeout)
 {
   int count = -1;
@@ -208,6 +219,7 @@ int dce_select (int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds,
 
   if (timeout)
     {
+    if (timeout->tv_sec == 0 && timeout->tv_usec > 0 && timeout->tv_usec < 1000) { timeout->tv_usec = 1000; }
       pollTo = timeout->tv_sec * 1000 + timeout->tv_usec / 1000;
     }
 

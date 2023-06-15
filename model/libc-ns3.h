@@ -49,9 +49,9 @@
 // // not really a libc function, but we still need to get pointer from DCE to this function
 NATIVE (dce_global_variables_setup)
 
-// Not sure where it is defined and implemented
-// NATIVE (__xpg_strerror_r)
-
+// Let's go crazy
+NATIVE (syscall)
+DCE (__fdelt_chk)
 
 DCE    (__cxa_finalize)
 DCE    (__cxa_atexit)
@@ -124,7 +124,7 @@ NATIVE (bzero)
 NATIVE_WITH_ALIAS2 (explicit_bzero, __explicit_bzero_chk)
 #endif	/* HAVE___EXPLICIT_BZERO */
 NATIVE (strerror)
-NATIVE (strerror_r)
+NATIVE_WITH_ALIAS2 (strerror_r, __xpg_strerror_r)
 NATIVE (strcoll)
 NATIVE (memset)
 NATIVE (memcpy)
@@ -135,7 +135,7 @@ NATIVE (memmove)
 NATIVE_EXPLICIT (memchr, void * (*)(void *, int, size_t))
 NATIVE_EXPLICIT (memrchr, void * (*)(void *, int, size_t))
 NATIVE (strcpy)
-NATIVE (strncpy)
+NATIVE_WITH_ALIAS2 (strncpy, __strncpy_chk)
 NATIVE (__stpncpy)
 NATIVE (strcat)
 NATIVE (strncat)
@@ -158,7 +158,6 @@ NATIVE_EXPLICIT (strtok, char * (*)(char *, const char *))
 NATIVE_EXPLICIT (strtok_r,  char * (*)(char *, const char *, char **))
 NATIVE (strsep)
 NATIVE (strsignal)
-
 
 // LOCALE.H
 DCE    (setlocale)
@@ -334,7 +333,7 @@ NATIVE (fprintf)
 NATIVE (sprintf)
 DCE (asprintf)
 DCE (vasprintf)
-NATIVE (dprintf)
+DCE (dprintf)
 NATIVE (vdprintf)
 DCE_WITH_ALIAS2 (fgetc,fgetc_unlocked)
 NATIVE (getc)
